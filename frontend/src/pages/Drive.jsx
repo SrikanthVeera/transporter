@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CheckCircle, DollarSign, Clock, Shield, MapPin, Smartphone, Info, Mail, Lock, User, ArrowRight } from 'lucide-react';
+import { Smartphone, Info, Mail, Lock, User, ArrowRight } from 'lucide-react';
 import { auth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from '../services/firebase';
 import driverImg from '../assets/driver1.png';
 import autoImg from '../assets/auto1.jpg';
@@ -208,19 +208,23 @@ const Drive = () => {
 
                     <div className="grid md:grid-cols-3 gap-8">
                         {[
-                            { icon: DollarSign, title: "Zero Commission", desc: "Keep 100% of what you earn during promotional periods. Low commission thereafter." },
-                            { icon: Clock, title: "Flexible Schedule", desc: "You decide when and how long you want to drive. No minimum hours required." },
-                            { icon: Shield, title: "Safety First", desc: "24/7 designated support line and in-app emergency button for your safety." },
-                            { icon: Smartphone, title: "Easy App", desc: "Navigate easily with our driver-friendly app. See earnings in real-time." },
-                            { icon: MapPin, title: "High Demand", desc: "Get more rides with our growing user base in top cities across the country." },
-                            { icon: CheckCircle, title: "Insurance Cover", desc: "Comprehensive accidental insurance coverage for you and your family." },
+                            { img: "https://placehold.co/200x200/f3e8ff/9333ea?text=Zero+Comm", title: "Zero Commission", desc: "Keep 100% of what you earn during promotional periods. Low commission thereafter." },
+                            { img: "https://placehold.co/200x200/f3e8ff/9333ea?text=Flexible", title: "Flexible Schedule", desc: "You decide when and how long you want to drive. No minimum hours required." },
+                            { img: "https://placehold.co/200x200/f3e8ff/9333ea?text=Safety", title: "Safety First", desc: "24/7 designated support line and in-app emergency button for your safety." },
+                            { img: "https://placehold.co/200x200/f3e8ff/9333ea?text=Easy+App", title: "Easy App", desc: "Navigate easily with our driver-friendly app. See earnings in real-time." },
+                            { img: "https://placehold.co/200x200/f3e8ff/9333ea?text=Demand", title: "High Demand", desc: "Get more rides with our growing user base in top cities across the country." },
+                            { img: "https://placehold.co/200x200/f3e8ff/9333ea?text=Insurance", title: "Insurance Cover", desc: "Comprehensive accidental insurance coverage for you and your family." },
                         ].map((item, idx) => (
-                            <div key={idx} className="p-8 rounded-2xl bg-gray-50 border border-gray-100 hover:shadow-lg transition-all group">
-                                <div className="w-14 h-14 bg-purple-100 text-purple-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                                    <item.icon size={28} />
+                            <div key={idx} className="p-8 rounded-2xl bg-gray-50 border border-gray-100 hover:shadow-lg transition-all group flex flex-col items-center text-center">
+                                <div className="w-32 h-32 mb-6 group-hover:scale-110 transition-transform">
+                                    <img
+                                        src={item.img}
+                                        alt={item.title}
+                                        className="w-full h-full object-contain drop-shadow-md"
+                                    />
                                 </div>
                                 <h3 className="text-xl font-bold text-gray-900 mb-3">{item.title}</h3>
-                                <p className="text-gray-500 leading-relaxed">{item.desc}</p>
+                                <p className="text-gray-500 leading-relaxed text-sm">{item.desc}</p>
                             </div>
                         ))}
                     </div>

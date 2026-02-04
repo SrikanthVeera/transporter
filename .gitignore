@@ -29,3 +29,8 @@ node_modules
 server/services/firebaseServiceAccount.json
 *.pem
 .env.local
+
+firebaseServiceAccount.json
+backend/services/firebaseServiceAccount.json
+.env
+node_modules

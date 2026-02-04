@@ -6,7 +6,7 @@ import HeroBg from '../assets/main1.jpg';
 
 const Hero = () => {
     return (
-        <div className="relative min-h-screen w-full flex flex-col md:flex-row items-center md:pt-20 pb-0 md:pb-20 overflow-x-hidden bg-gray-50 md:bg-transparent">
+        <div className="relative min-h-screen w-full flex flex-col md:flex-row items-start md:items-center md:pt-20 pb-0 md:pb-20 overflow-x-hidden bg-gray-50 md:bg-transparent">
 
             {/* --- DESKTOP BACKGROUND (Hidden on Mobile) --- */}
             <div className="hidden md:absolute md:inset-0 md:z-0 md:block">
@@ -18,7 +18,7 @@ const Hero = () => {
             </div>
 
             {/* --- MOBILE HEADER (Title) --- */}
-            <div className="md:hidden pt-24 pb-6 w-full text-center z-20 px-4">
+            <div className="md:hidden pt-16 pb-4 w-full text-center z-20 px-4">
                 <h1 className="text-4xl font-black font-heading text-slate-900 tracking-widest uppercase">
                     TRANSPORTER
                 </h1>
@@ -41,7 +41,7 @@ const Hero = () => {
             </div>
 
             {/* --- CONTENT CONTAINER --- */}
-            <div className="w-full flex-grow flex flex-col md:flex-row justify-start items-center md:items-start relative z-10 max-w-7xl mx-auto md:px-6 lg:px-8 md:pt-12">
+            <div className="w-full flex-grow flex flex-col md:flex-row justify-start items-start md:items-start relative z-10 max-w-7xl mx-auto md:px-6 lg:px-8 pt-2 md:pt-12">
 
                 {/* Booking Widget Wrapper */}
                 <div className="w-full md:max-w-md px-4 md:px-0 z-20">

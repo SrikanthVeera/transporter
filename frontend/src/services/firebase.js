@@ -13,6 +13,9 @@ const firebaseConfig = {
 // Debug: Check if config is loaded
 if (!firebaseConfig.apiKey) {
     console.error("Firebase Config Missing! Check your .env file.");
+} else {
+    console.log("Firebase initialized with project:", firebaseConfig.projectId);
+    console.log("Firebase API Key (first 10 chars):", firebaseConfig.apiKey.substring(0, 10) + "...");
 }
 
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
@@ -20,12 +23,12 @@ export const auth = getAuth(app);
 // Force language to avoid issues
 auth.useDeviceLanguage();
 
-// IMPORTANT: Workaround for "auth/invalid-app-credential" on localhost
-// This disables the strict App Check/Recaptcha verification for testing
-// Remove this line in production!
+// Optional: Local testing helper (keep disabled for real SMS)
+// Local testing helper: Bypasses reCAPTCHA for 'Test Phone Numbers' configured in Firebase Console.
+// Real phone numbers will NOT work on localhost with this enabled.
 if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
     // auth.settings.appVerificationDisabledForTesting = true;
-    // console.log("App Verification Disabled for Testing (Localhost)");
+    console.log("App Verification Disabled for Testing (Localhost) - Use Firebase Test Phone Numbers only.");
 }
 
 export const initRecaptcha = async () => {
@@ -43,38 +46,42 @@ export const initRecaptcha = async () => {
     }
 
     if (window.recaptchaVerifier) {
-        // console.log("Recaptcha already initialized");
-        // Ensure it's cleared if previously broken
         try {
             window.recaptchaVerifier.clear();
-        } catch (e) { }
+        } catch (e) {
+            console.warn("Failed to clear existing recaptcha:", e);
+        }
         window.recaptchaVerifier = null;
     }
 
     try {
-        console.log("Initializing RecaptchaVerifier (Compat Signature)...");
-        // We found that for this specific setup, (container, params, auth) works
-        // while (auth, container, params) throws undefined 'appVerificationDisabledForTesting'.
+        console.log("Initializing RecaptchaVerifier...");
         window.recaptchaVerifier = new RecaptchaVerifier(
-            container,
+            containerId,
             {
-                'size': 'invisible',
-                'callback': (response) => {
+                size: 'invisible',
+                callback: (response) => {
                     console.log("reCAPTCHA solved");
                 },
                 'expired-callback': () => {
-                    console.log('reCAPTCHA expired');
+                    console.warn('reCAPTCHA expired');
+                    // Do not nullify immediately, standard behavior is to allow reset
+                    // window.recaptchaVerifier = null; 
                 }
             },
             auth
         );
+
+        await window.recaptchaVerifier.render();
         console.log("RecaptchaVerifier initialized successfully.");
+        return window.recaptchaVerifier;
+
     } catch (error) {
         console.error("RecaptchaVerifier init error:", error);
+        // Clear the broken verifier
         window.recaptchaVerifier = null;
+        throw error;
     }
-
-    return window.recaptchaVerifier;
 };
 
 export { signInWithPhoneNumber, signInWithEmailAndPassword, createUserWithEmailAndPassword };

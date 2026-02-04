@@ -1,10 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 /**
  * useLocationService Hook
  * 
  * Centralizes Google Maps Autocomplete and Geolocation logic
  * for reuse across Home Page (BookingWidget) and Customer Page (RideSelection).
+ * Updated to use Callback Refs to support dynamic inputs (Mobile/Desktop views).
  */
 export const useLocationService = (initialPickup = '', initialDrop = '') => {
     const [pickup, setPickup] = useState(initialPickup);
@@ -16,10 +17,70 @@ export const useLocationService = (initialPickup = '', initialDrop = '') => {
 
     const [isLocating, setIsLocating] = useState(false);
 
-    const pickupInputRef = useRef(null);
-    const dropInputRef = useRef(null);
-    const pickupAutocompleteRef = useRef(null);
-    const dropAutocompleteRef = useRef(null);
+    // Track initialized instances to prevent duplicates
+    const autocompleteInstances = useRef(new Map()); // Map<Element, AutocompleteInstance>
+
+    // Track Nodes that requested initialization
+    const inputNodesRef = useRef([]);
+
+    // Helper: Initialize Autocomplete on a specific node
+    const initAutocomplete = (element, type) => {
+        if (!element) return;
+        if (!window.google || !window.google.maps || !window.google.maps.places) return;
+
+        // Prevent double binding on same DOM element
+        if (autocompleteInstances.current.has(element)) return;
+
+        const options = {
+            fields: ["formatted_address", "geometry", "name"],
+            strictBounds: false,
+        };
+
+        const autocomplete = new window.google.maps.places.Autocomplete(element, options);
+
+        autocomplete.addListener("place_changed", () => {
+            const place = autocomplete.getPlace();
+            if (place.geometry) {
+                const address = place.formatted_address || place.name;
+                const coords = {
+                    lat: place.geometry.location.lat(),
+                    lng: place.geometry.location.lng(),
+                };
+
+                if (type === 'pickup') {
+                    setPickup(address);
+                    setPickupCoords(coords);
+                } else {
+                    setDrop(address);
+                    setDropCoords(coords);
+                }
+            }
+        });
+
+        autocompleteInstances.current.set(element, autocomplete);
+    };
+
+    // Callback Ref for Pickup Input(s)
+    const pickupInputRef = useCallback((node) => {
+        if (node) {
+            // Track this node
+            if (!inputNodesRef.current.find(n => n.node === node && n.type === 'pickup')) {
+                inputNodesRef.current.push({ node, type: 'pickup' });
+            }
+            // Try to initialize immediately
+            initAutocomplete(node, 'pickup');
+        }
+    }, []);
+
+    // Callback Ref for Drop Input(s)
+    const dropInputRef = useCallback((node) => {
+        if (node) {
+            if (!inputNodesRef.current.find(n => n.node === node && n.type === 'drop')) {
+                inputNodesRef.current.push({ node, type: 'drop' });
+            }
+            initAutocomplete(node, 'drop');
+        }
+    }, []);
 
     // FIX: Ensure Google Places dropdown is visible above high z-index modals/sheets
     useEffect(() => {
@@ -76,56 +137,28 @@ export const useLocationService = (initialPickup = '', initialDrop = '') => {
         };
     }, []);
 
-    // Initialize Autocomplete
+    // Poll for Google Maps API (in case it loads late)
     useEffect(() => {
-        if (!window.google || !window.google.maps || !window.google.maps.places) return;
-
-        const options = {
-            fields: ["formatted_address", "geometry", "name"],
-            strictBounds: false,
+        const checkAndInit = () => {
+            if (window.google && window.google.maps && window.google.maps.places) {
+                inputNodesRef.current.forEach(({ node, type }) => {
+                    initAutocomplete(node, type);
+                });
+                return true;
+            }
+            return false;
         };
 
-        // Pickup Autocomplete
-        if (pickupInputRef.current) {
-            // Check if already initialized to prevent double-binding
-            if (!pickupAutocompleteRef.current) {
-                pickupAutocompleteRef.current = new window.google.maps.places.Autocomplete(
-                    pickupInputRef.current,
-                    options
-                );
-                pickupAutocompleteRef.current.addListener("place_changed", () => {
-                    const place = pickupAutocompleteRef.current.getPlace();
-                    if (place.geometry) {
-                        setPickup(place.formatted_address || place.name);
-                        setPickupCoords({
-                            lat: place.geometry.location.lat(),
-                            lng: place.geometry.location.lng(),
-                        });
-                    }
-                });
-            }
+        if (!checkAndInit()) {
+            const interval = setInterval(() => {
+                if (checkAndInit()) {
+                    clearInterval(interval);
+                }
+            }, 500);
+            return () => clearInterval(interval);
         }
+    }, []);
 
-        // Drop Autocomplete
-        if (dropInputRef.current) {
-            if (!dropAutocompleteRef.current) {
-                dropAutocompleteRef.current = new window.google.maps.places.Autocomplete(
-                    dropInputRef.current,
-                    options
-                );
-                dropAutocompleteRef.current.addListener("place_changed", () => {
-                    const place = dropAutocompleteRef.current.getPlace();
-                    if (place.geometry) {
-                        setDrop(place.formatted_address || place.name);
-                        setDropCoords({
-                            lat: place.geometry.location.lat(),
-                            lng: place.geometry.location.lng(),
-                        });
-                    }
-                });
-            }
-        }
-    }, [pickupInputRef.current, dropInputRef.current]);
 
     // Detect Current Location Logic
     const detectLocation = () => {
@@ -157,14 +190,15 @@ export const useLocationService = (initialPickup = '', initialDrop = '') => {
                         setPickupCoords(latlng);
 
                         // Bias the autocomplete to this location if it exists
-                        if (pickupAutocompleteRef.current) {
-                            // Create bounds around the current location
+                        // Try to set bounds on all active instances
+                        autocompleteInstances.current.forEach((instance) => {
                             const circle = new window.google.maps.Circle({
                                 center: latlng,
                                 radius: 5000, // 5km radius bias
                             });
-                            pickupAutocompleteRef.current.setBounds(circle.getBounds());
-                        }
+                            instance.setBounds(circle.getBounds());
+                        });
+
                     } else {
                         console.error("Geocoder failed due to: " + status);
                         setPickup("Current Location (Lat/Lng)");

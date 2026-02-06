@@ -4,7 +4,7 @@ import { useLocationService } from '../hooks/useLocationService';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Car, Truck, Clock, MapPin, Star, ArrowRight, Shield, Info, ChevronLeft, Navigation, User, Package } from 'lucide-react';
+import { Car, Truck, Bus, Clock, MapPin, Star, ArrowRight, Shield, Info, ChevronLeft, Navigation, User, Package } from 'lucide-react';
 import { auth, signInWithCustomToken } from "../services/firebase";
 
 
@@ -14,7 +14,7 @@ import { GoogleMap, DirectionsRenderer, MarkerF } from '@react-google-maps/api';
 
 import autoImg from '../assets/auto1.jpg';
 import carImg from '../assets/car1.jpg';
-import truckImg from '../assets/truck1.jpg';
+import truckImg from '../assets/truck2.png';
 import customerAppImg from '../assets/playstorecustomer.png';
 import driverAppImg from '../assets/playstoredriver.png';
 
@@ -29,7 +29,7 @@ const RideCard = ({ ride, selected, onSelect }) => (
         onClick={() => onSelect(ride.id)}
         className={`relative p-4 mb-3 rounded-xl cursor-pointer border transition-all duration-200 flex items-center justify-between group bg-white
             ${selected
-                ? 'border-blue-500 bg-blue-50 shadow-sm'
+                ? 'border-purple-600 bg-purple-50 shadow-sm'
                 : 'border-gray-200 hover:bg-gray-50'
             }`}
     >
@@ -210,9 +210,13 @@ const RideSelection = () => {
                                 priceSedan,
                                 priceSUV
                             });
+                        } else if (status === window.google.maps.DirectionsStatus.NOT_FOUND || status === window.google.maps.DirectionsStatus.ZERO_RESULTS) {
+                            // Suppress error for incomplete/invalid locations during typing
+                            console.log("Route not found (yet) - waiting for valid location.");
+                            setDirectionsResponse(null);
+                            setFareDetails(null);
                         } else {
                             console.error(`Directions request failed due to ${status}`);
-                            // Keep default/fallback or show error
                         }
                         setLoading(false);
                     }
@@ -591,6 +595,18 @@ const RideSelection = () => {
             description: 'Travel in Class (Merc, Audi, BMW)',
             capacity: '4 people'
         },
+        {
+            id: 'outstation_minibus',
+            category: 'outstation',
+            name: 'Mini Bus',
+            icon: Bus,
+            image: truckImg, // Using larger vehicle image
+            price: fareDetails?.priceSUV ? Math.round(fareDetails.priceSUV * 3.0) : null,
+            distance: fareDetails?.distanceKM,
+            duration: fareDetails?.durationMins,
+            description: '12+ Seater for large groups',
+            capacity: '12-20 people'
+        },
 
         // --- OUTSTATION END ---
     ];
@@ -637,7 +653,7 @@ const RideSelection = () => {
                                             placeholder="Current Location"
                                             value={pickup}
                                             onChange={(e) => setPickup(e.target.value)}
-                                            className="w-full bg-transparent border-0 focus:ring-0 rounded-xl py-1.5 pl-8 pr-10 text-gray-900 font-medium placeholder-gray-400 text-sm"
+                                            className="w-full bg-transparent border-0 outline-none focus:outline-none focus:ring-2 focus:ring-purple-600 rounded-xl py-1.5 pl-8 pr-10 text-gray-900 font-medium placeholder-gray-400 text-sm"
                                         />
                                         {/* Locate Button inside input */}
                                         <button
@@ -663,7 +679,7 @@ const RideSelection = () => {
                                             placeholder="Enter Destination"
                                             value={drop}
                                             onChange={(e) => setDrop(e.target.value)}
-                                            className="w-full bg-transparent border-0 focus:ring-0 rounded-xl py-1.5 pl-8 pr-4 text-gray-900 font-medium placeholder-gray-400 text-sm"
+                                            className="w-full bg-transparent border-0 outline-none focus:outline-none focus:ring-2 focus:ring-purple-600 rounded-xl py-1.5 pl-8 pr-4 text-gray-900 font-medium placeholder-gray-400 text-sm"
                                         />
                                     </div>
                                 </div>
@@ -675,25 +691,25 @@ const RideSelection = () => {
                         {/* Service Selection (Mobile) */}
                         <div className="mb-4 px-1">
                             <h3 className="text-gray-900 font-bold text-base mb-3">Select Vehicle Type</h3>
-                            <div className="grid grid-cols-4 gap-2">
+                            <div className="flex gap-3 overflow-x-auto pb-2 -mx-5 px-5 no-scrollbar snap-x">
                                 {[
                                     { id: 'car', label: 'Car', img: carImg },
                                     { id: 'auto', label: 'Auto', img: autoImg },
                                     { id: 'truck', label: 'Truck', img: truckImg },
-                                    { id: 'outstation', label: 'Stations', img: carImg },
+                                    { id: 'outstation', label: 'Outstation', img: carImg },
                                 ].map((type) => (
                                     <button
                                         key={type.id}
                                         onClick={() => { setServiceType(type.id); setSelectedRide(null); }}
-                                        className={`flex flex-col items-center justify-center gap-1 p-2 rounded-xl border transition-all duration-200 h-full
+                                        className={`flex-none w-[23%] min-w-[85px] snap-center flex flex-col items-center justify-center gap-1.5 p-2 rounded-2xl border-2 transition-all duration-300
                                             ${serviceType === type.id
-                                                ? 'bg-purple-50 border-purple-600 shadow-md ring-1 ring-purple-600 z-10'
-                                                : 'bg-white border-gray-100 text-gray-400 hover:border-gray-200'}`}
+                                                ? 'bg-purple-50 border-purple-600 shadow-md scale-105 z-10'
+                                                : 'bg-white border-gray-100 shadow-sm text-gray-400 hover:border-gray-200'}`}
                                     >
-                                        <div className="w-full h-8 flex items-center justify-center mb-1">
+                                        <div className="w-full h-10 flex items-center justify-center">
                                             <img src={type.img} alt={type.label} className="w-full h-full object-contain drop-shadow-sm" />
                                         </div>
-                                        <span className={`text-[10px] font-bold tracking-wide ${serviceType === type.id ? 'text-purple-900' : 'text-gray-500'}`}>
+                                        <span className={`text-[11px] font-bold tracking-wide ${serviceType === type.id ? 'text-purple-700' : 'text-gray-500'}`}>
                                             {type.label}
                                         </span>
                                     </button>
@@ -742,7 +758,7 @@ const RideSelection = () => {
                             onClick={handleContinue}
                             className={`w-full py-3 rounded-xl text-base font-bold shadow-md transition-all flex items-center justify-center gap-2
                                 ${selectedRide
-                                    ? 'bg-yellow-400 text-black hover:bg-yellow-500 active:scale-[0.98]'
+                                    ? 'bg-purple-600 text-white hover:bg-purple-700 active:scale-[0.98]'
                                     : 'bg-gray-200 text-gray-400 cursor-not-allowed'
                                 }`}
                         >
@@ -1013,16 +1029,16 @@ const RideSelection = () => {
             <section className="hidden lg:block py-16 bg-white">
                 <div className="container mx-auto px-4">
                     <div className="text-center mb-12">
-                        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Download our apps for the best experience</h2>
-                        <p className="text-gray-600 max-w-2xl mx-auto">Get seamless rides and drive opportunities with our mobile apps</p>
+                        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Ready to get to your destination at the best price?</h2>
+                        <p className="text-gray-600 max-w-2xl mx-auto">Join thousands of Indians choosing fair prices and reliable rides. Download Transporter Today.</p>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
                         {/* Customer App */}
                         <div className="bg-gray-50 p-6 md:p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all group">
                             <div className="flex items-center justify-between mb-6">
-                                <div className="w-20 h-20 bg-white rounded-2xl flex items-center justify-center overflow-hidden shadow-sm border border-gray-100">
-                                    <img src={customerAppImg} alt="Transporter Customer App" className="w-full h-full object-cover" />
+                                <div className="w-32 h-32 bg-white rounded-2xl flex items-center justify-center overflow-hidden shadow-sm border border-gray-100">
+                                    <img src={customerAppImg} alt="Transporter Customer App" className="w-full h-full object-contain" />
                                 </div>
                                 <div className="text-purple-600 group-hover:translate-x-2 transition-transform">
                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -1033,20 +1049,30 @@ const RideSelection = () => {
                             <h3 className="text-lg font-bold text-gray-900 mb-2">Transporter</h3>
                             <p className="text-gray-600 text-sm mb-6">Book rides, track your journey, and enjoy seamless transportation</p>
                             <div className="flex gap-3">
-                                <button className="flex-1 bg-gray-900 text-white py-2 px-3 rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors">
+                                <a
+                                    href="https://apps.apple.com/in/app/transporter-customer/id6755738681"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex-1 bg-gray-900 text-white py-2 px-3 rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors text-center"
+                                >
                                     App Store
-                                </button>
-                                <button className="flex-1 bg-gray-900 text-white py-2 px-3 rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors">
+                                </a>
+                                <a
+                                    href="https://play.google.com/store/apps/details?id=com.transporter.customer"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex-1 bg-gray-900 text-white py-2 px-3 rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors text-center"
+                                >
                                     Google Play
-                                </button>
+                                </a>
                             </div>
                         </div>
 
                         {/* Driver App */}
                         <div className="bg-white p-6 md:p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all group border-2 border-purple-200">
                             <div className="flex items-center justify-between mb-6">
-                                <div className="w-20 h-20 bg-white rounded-2xl flex items-center justify-center overflow-hidden shadow-sm border border-gray-100">
-                                    <img src={driverAppImg} alt="Transporter Driver App" className="w-full h-full object-cover" />
+                                <div className="w-32 h-32 bg-white rounded-2xl flex items-center justify-center overflow-hidden shadow-sm border border-gray-100">
+                                    <img src={driverAppImg} alt="Transporter Driver App" className="w-full h-full object-contain" />
                                 </div>
                                 <div className="text-purple-600 group-hover:translate-x-2 transition-transform">
                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -1057,12 +1083,22 @@ const RideSelection = () => {
                             <h3 className="text-lg font-bold text-gray-900 mb-2">Transporter Driver</h3>
                             <p className="text-gray-600 text-sm mb-6">Register as a driver, accept rides, and start earning with flexible hours</p>
                             <div className="flex gap-3">
-                                <button className="flex-1 bg-purple-600 text-white py-2 px-3 rounded-lg text-sm font-medium hover:bg-purple-700 transition-colors">
+                                <a
+                                    href="#"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex-1 bg-purple-600 text-white py-2 px-3 rounded-lg text-sm font-medium hover:bg-purple-700 transition-colors text-center"
+                                >
                                     App Store
-                                </button>
-                                <button className="flex-1 bg-purple-600 text-white py-2 px-3 rounded-lg text-sm font-medium hover:bg-purple-700 transition-colors">
+                                </a>
+                                <a
+                                    href="https://play.google.com/store/apps/details?id=com.transporterpartner"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex-1 bg-purple-600 text-white py-2 px-3 rounded-lg text-sm font-medium hover:bg-purple-700 transition-colors text-center"
+                                >
                                     Google Play
-                                </button>
+                                </a>
                             </div>
                         </div>
                     </div>

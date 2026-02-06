@@ -2,7 +2,7 @@ import React from 'react';
 import BookingWidget from './BookingWidget';
 import { ShieldCheck, Zap } from 'lucide-react';
 
-import HeroBg from '../assets/main1.jpg';
+import HeroBg from '../assets/main2.jpg';
 
 const Hero = () => {
     return (
@@ -19,24 +19,27 @@ const Hero = () => {
 
             {/* --- MOBILE HEADER (Title) --- */}
             <div className="md:hidden pt-28 pb-4 w-full text-center z-20 px-4">
-                <h1 className="text-4xl font-black font-heading text-slate-900 tracking-widest uppercase">
-                    TRANSPORTER
+                <h1 className="text-3xl font-black font-heading text-slate-900 leading-tight mb-2">
+                    Stop Paying Surge.<br />Start Moving Fair.
                 </h1>
-                <p className="text-slate-500 text-sm font-bold tracking-wide mt-1">
-                    Fast. Safe. Reliable.
+                <p className="text-slate-600 text-sm font-medium leading-relaxed px-2 mt-2">
+                    Book Autos, Cabs, and Trucks at flat rates all day, every day. Whether you need to reach the office or shift your home, Transporter is India's most honest movement app.
                 </p>
             </div>
 
-            {/* --- DESKTOP TITLE (Original) --- */}
-            <div className="hidden md:block absolute top-[12%] right-16 z-10 text-right">
-                <h1 className="text-7xl font-black font-heading text-white tracking-widest uppercase layer-shadow">
-                    TRANSPORTER
+            {/* --- DESKTOP TITLE (Updated) --- */}
+            <div className="hidden md:block absolute top-[15%] right-8 lg:right-16 z-10 text-right max-w-2xl">
+                <h1 className="text-5xl lg:text-6xl font-black font-heading text-white leading-tight layer-shadow drop-shadow-lg mb-6">
+                    Stop Paying Surge.<br />Start Moving Fair.
                 </h1>
-                <div className="flex items-center justify-end gap-3 mt-2 mr-1">
-                    <p className="text-2xl font-bold text-white tracking-wide shadow-black/20 drop-shadow-md font-heading">
-                        Fast. Safe. Reliable.
+                <div className="flex flex-col items-end gap-2 mr-1">
+                    <p className="text-lg lg:text-xl font-medium text-white shadow-black/20 drop-shadow-md font-heading leading-relaxed">
+                        Book Autos, Cabs, and Trucks at flat rates all day, every day.
                     </p>
-                    <span className="h-1.5 w-16 bg-yellow-400 border border-black/10"></span>
+                    <p className="text-lg lg:text-xl font-medium text-white shadow-black/20 drop-shadow-md font-heading leading-relaxed">
+                        Whether you need to reach the office or shift your home,<br />
+                        <span className="text-yellow-400 font-bold">Transporter</span> is India's most honest movement app.
+                    </p>
                 </div>
             </div>
 

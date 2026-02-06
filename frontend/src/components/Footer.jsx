@@ -40,24 +40,24 @@ const Footer = () => {
                         <h4 className="font-heading font-bold text-lg mb-6 text-white">Company</h4>
                         <ul className="space-y-4 text-sm text-gray-400">
                             <li>
-                                <button 
-                                    onClick={() => handleNavigation('/')} 
+                                <button
+                                    onClick={() => handleNavigation('/')}
                                     className="hover:text-purple-300 transition-colors text-left"
                                 >
                                     Home
                                 </button>
                             </li>
                             <li>
-                                <button 
-                                    onClick={() => handleNavigation('/about')} 
+                                <button
+                                    onClick={() => handleNavigation('/about')}
                                     className="hover:text-purple-300 transition-colors text-left"
                                 >
                                     About Us
                                 </button>
                             </li>
                             <li>
-                                <button 
-                                    onClick={() => handleNavigation('#')} 
+                                <button
+                                    onClick={() => handleNavigation('#')}
                                     className="hover:text-purple-300 transition-colors text-left"
                                 >
                                     Contact
@@ -70,16 +70,16 @@ const Footer = () => {
                         <h4 className="font-heading font-bold text-lg mb-6 text-white">Products</h4>
                         <ul className="space-y-4 text-sm text-gray-400">
                             <li>
-                                <button 
-                                    onClick={() => handleNavigation('/rides')} 
+                                <button
+                                    onClick={() => handleNavigation('/ride')}
                                     className="hover:text-purple-300 transition-colors text-left"
                                 >
                                     Rider
                                 </button>
                             </li>
                             <li>
-                                <button 
-                                    onClick={() => handleNavigation('/drive')} 
+                                <button
+                                    onClick={() => handleNavigation('/drive')}
                                     className="hover:text-purple-300 transition-colors text-left"
                                 >
                                     Driver
@@ -92,24 +92,24 @@ const Footer = () => {
                         <h4 className="font-heading font-bold text-lg mb-6 text-white">Support</h4>
                         <ul className="space-y-4 text-sm text-gray-400">
                             <li>
-                                <button 
-                                    onClick={() => handleNavigation('#')} 
+                                <button
+                                    onClick={() => handleNavigation('#')}
                                     className="hover:text-purple-300 transition-colors text-left"
                                 >
                                     Help Center
                                 </button>
                             </li>
                             <li>
-                                <button 
-                                    onClick={() => handleNavigation('#')} 
+                                <button
+                                    onClick={() => handleNavigation('#')}
                                     className="hover:text-purple-300 transition-colors text-left"
                                 >
                                     Terms
                                 </button>
                             </li>
                             <li>
-                                <button 
-                                    onClick={() => handleNavigation('#')} 
+                                <button
+                                    onClick={() => handleNavigation('#')}
                                     className="hover:text-purple-300 transition-colors text-left"
                                 >
                                     Policy

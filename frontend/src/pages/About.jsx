@@ -6,8 +6,7 @@ import customerAppImg from '../assets/playstorecustomer.png';
 import driverAppImg from '../assets/playstoredriver.png';
 import autoImg from '../assets/auto1.jpg';
 import carImg from '../assets/car1.jpg';
-import truckImg from '../assets/truck1.jpg';
-
+import truckImg from '../assets/truck2.png';
 const About = () => {
     return (
         <div className="min-h-screen w-full bg-white">
@@ -114,9 +113,8 @@ const About = () => {
                                     <h2 className="text-3xl font-heading font-bold text-gray-900">Our Mission</h2>
                                 </div>
                                 <p className="text-lg text-gray-600 leading-relaxed">
-                                    To make transportation accessible, affordable, and reliable for everyone.
-                                    We believe mobility is a fundamental right that should connect people to
-                                    opportunities, not create barriers.
+                                    We are building a fair ecosystem where customers get reliable rides at flat rates,
+                                    and drivers earn a dignified livelihood by keeping 100% of their fare.
                                 </p>
                             </div>
 
@@ -128,9 +126,8 @@ const About = () => {
                                     <h2 className="text-3xl font-heading font-bold text-gray-900">Our Vision</h2>
                                 </div>
                                 <p className="text-lg text-gray-600 leading-relaxed">
-                                    To become India's most trusted mobility platform, creating sustainable
-                                    livelihoods for millions while building smarter, cleaner cities for
-                                    future generations.
+                                    To be India's most honest movement platform, where every journey - whether moving people
+                                    or goods - is priced fairly, transparently, and without hidden surges.
                                 </p>
                             </div>
                         </div>
@@ -395,16 +392,16 @@ const About = () => {
             <section className="py-20 bg-gray-50">
                 <div className="container">
                     <div className="text-center mb-16">
-                        <h2 className="text-3xl font-bold text-gray-900 mb-4">Download our apps to get the best experience</h2>
-                        <p className="text-gray-600 max-w-2xl mx-auto">Experience seamless rides and drive opportunities with our mobile apps</p>
+                        <h2 className="text-3xl font-bold text-gray-900 mb-4">Ready to get to your destination at the best price?</h2>
+                        <p className="text-gray-600 max-w-2xl mx-auto">Join thousands of Indians choosing fair prices and reliable rides. Download Transporter Today.</p>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
                         {/* Customer App */}
                         <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all group cursor-pointer">
                             <div className="flex items-center justify-between mb-6">
-                                <div className="w-20 h-20 bg-white rounded-2xl flex items-center justify-center overflow-hidden shadow-sm border border-gray-100">
-                                    <img src={customerAppImg} alt="Transporter Customer App" className="w-full h-full object-cover" />
+                                <div className="w-32 h-32 bg-white rounded-2xl flex items-center justify-center overflow-hidden shadow-sm border border-gray-100">
+                                    <img src={customerAppImg} alt="Transporter Customer App" className="w-full h-full object-contain" />
                                 </div>
                                 <div className="text-purple-600 group-hover:translate-x-2 transition-transform">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -415,20 +412,30 @@ const About = () => {
                             <h3 className="text-xl font-bold text-gray-900 mb-2">Transporter</h3>
                             <p className="text-gray-600 text-sm mb-6">Book rides, track your journey, and enjoy seamless transportation</p>
                             <div className="flex gap-3">
-                                <button className="flex-1 bg-gray-900 text-white py-2 px-4 rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors">
+                                <a
+                                    href="https://apps.apple.com/in/app/transporter-customer/id6755738681"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex-1 bg-gray-900 text-white py-2 px-4 rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors text-center"
+                                >
                                     App Store
-                                </button>
-                                <button className="flex-1 bg-gray-900 text-white py-2 px-4 rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors">
+                                </a>
+                                <a
+                                    href="https://play.google.com/store/apps/details?id=com.transporter.customer"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex-1 bg-gray-900 text-white py-2 px-4 rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors text-center"
+                                >
                                     Google Play
-                                </button>
+                                </a>
                             </div>
                         </div>
 
                         {/* Driver App */}
                         <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all group cursor-pointer">
                             <div className="flex items-center justify-between mb-6">
-                                <div className="w-20 h-20 bg-white rounded-2xl flex items-center justify-center overflow-hidden shadow-sm border border-gray-100">
-                                    <img src={driverAppImg} alt="Transporter Driver App" className="w-full h-full object-cover" />
+                                <div className="w-32 h-32 bg-white rounded-2xl flex items-center justify-center overflow-hidden shadow-sm border border-gray-100">
+                                    <img src={driverAppImg} alt="Transporter Driver App" className="w-full h-full object-contain" />
                                 </div>
                                 <div className="text-purple-600 group-hover:translate-x-2 transition-transform">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -439,12 +446,22 @@ const About = () => {
                             <h3 className="text-xl font-bold text-gray-900 mb-2">Transporter Driver</h3>
                             <p className="text-gray-600 text-sm mb-6">Register as a driver, accept rides, and start earning with flexible hours</p>
                             <div className="flex gap-3">
-                                <button className="flex-1 bg-gray-900 text-white py-2 px-4 rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors">
+                                <a
+                                    href="#"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex-1 bg-purple-600 text-white py-2 px-4 rounded-lg text-sm font-medium hover:bg-purple-700 transition-colors text-center"
+                                >
                                     App Store
-                                </button>
-                                <button className="flex-1 bg-gray-900 text-white py-2 px-4 rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors">
+                                </a>
+                                <a
+                                    href="https://play.google.com/store/apps/details?id=com.transporterpartner"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex-1 bg-purple-600 text-white py-2 px-4 rounded-lg text-sm font-medium hover:bg-purple-700 transition-colors text-center"
+                                >
                                     Google Play
-                                </button>
+                                </a>
                             </div>
                         </div>
                     </div>

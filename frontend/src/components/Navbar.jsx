@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Rocket } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import logoImg from "../assets/customer's logo.png";
 
 const Navbar = () => {
     const [scrolled, setScrolled] = useState(false);
@@ -24,17 +25,15 @@ const Navbar = () => {
             <div className="container flex justify-between items-center">
                 {/* Logo */}
                 <Link to="/" className="flex items-center gap-2 group">
-                    <div className="w-10 h-10 rounded-xl bg-purple-600 flex items-center justify-center text-white shadow-lg group-hover:shadow-purple-200 transition-all">
-                        <Rocket size={24} fill="currentColor" />
-                    </div>
-                    <span className="text-2xl font-bold font-heading tracking-tight text-gray-900 group-hover:text-purple-600 transition-colors">Transporter</span>
+                    <img src={logoImg} alt="Transporter" className="h-12 md:h-20 w-auto object-contain" />
+                    <span className="text-lg md:text-2xl font-bold font-heading tracking-tight text-gray-900 group-hover:text-purple-600 transition-colors">Transporter</span>
                 </Link>
 
                 {/* Desktop Menu */}
                 <div className="hidden md:flex items-center gap-8">
                     {[
                         { name: 'Home', path: '/' },
-                        { name: 'Ride', path: '/rides' },
+                        { name: 'Ride', path: '/ride' },
                         { name: 'Drive', path: '/drive' },
                         { name: 'About', path: '/about' }
                     ].map((item) => (
@@ -54,7 +53,7 @@ const Navbar = () => {
             {isOpen && (
                 <div className="md:hidden absolute top-full left-0 w-full bg-white border-b border-gray-100 p-4 flex flex-col gap-4 shadow-xl">
                     <Link to="/" className="p-3 hover:bg-purple-50 rounded-lg text-gray-800 font-medium">Home</Link>
-                    <Link to="/rides" className="p-3 hover:bg-purple-50 rounded-lg text-gray-800 font-medium">Ride</Link>
+                    <Link to="/ride" className="p-3 hover:bg-purple-50 rounded-lg text-gray-800 font-medium">Ride</Link>
                     <Link to="/drive" className="p-3 hover:bg-purple-50 rounded-lg text-gray-800 font-medium">Drive</Link>
                     <Link to="/about" className="p-3 hover:bg-purple-50 rounded-lg text-gray-800 font-medium">About</Link>
                 </div>

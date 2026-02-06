@@ -113,6 +113,15 @@ a {
   color: transparent;
 }
 
+/* Hide Scrollbar */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
 /* Animations */
 @keyframes float {
   0% {

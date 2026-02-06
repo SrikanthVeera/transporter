@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLocationService } from '../hooks/useLocationService';
 import autoImg from '../assets/auto1.jpg';
 import carImg from '../assets/car1.jpg';
-import truckImg from '../assets/truck1.jpg';
+import truckImg from '../assets/truck2.png';
 
 const BookingWidget = () => {
     const navigate = useNavigate();
@@ -20,7 +20,7 @@ const BookingWidget = () => {
 
     const handleContinue = () => {
         if (!pickup || !drop) return;
-        navigate('/rides', {
+        navigate('/ride', {
             state: {
                 pickup,
                 drop,
@@ -104,14 +104,14 @@ const BookingWidget = () => {
                             <button
                                 key={type.id}
                                 onClick={() => setSelectedMode(type.id)}
-                                className={`relative flex flex-col items-center justify-between p-3 rounded-2xl border-2 transition-all duration-300 aspect-[4/3] group overflow-hidden
+                                className={`relative flex flex-col items-center justify-center gap-1 p-3 rounded-2xl border-2 transition-all duration-300 h-32 w-full group overflow-hidden
                                     ${selectedMode === type.id
                                         ? 'bg-purple-50/50 border-purple-600 ring-0 shadow-md transform scale-[1.02]'
                                         : 'bg-white border-gray-100 hover:border-gray-200 hover:shadow-lg'}`}
                             >
                                 {/* Popular Badge */}
                                 {type.popular && (
-                                    <div className="absolute top-2 right-2 bg-gradient-to-r from-orange-400 to-pink-500 text-white text-[9px] font-black px-2 py-0.5 rounded-full shadow-sm z-10 uppercase tracking-wide">
+                                    <div className="absolute top-2 right-2 bg-gradient-to-r from-purple-500 to-indigo-600 text-white text-[9px] font-black px-2 py-0.5 rounded-full shadow-sm z-10 uppercase tracking-wide">
                                         Popular
                                     </div>
                                 )}
@@ -125,7 +125,7 @@ const BookingWidget = () => {
                                     </div>
                                 )}
 
-                                <div className="w-full h-16 flex items-center justify-center mb-1 mt-3">
+                                <div className="w-full h-14 flex items-center justify-center mb-1 mt-3">
                                     <img
                                         src={type.img}
                                         alt={type.label}
